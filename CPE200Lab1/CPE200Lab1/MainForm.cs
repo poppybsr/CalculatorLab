@@ -22,7 +22,7 @@ namespace CPE200Lab1
         private CalculatorEngine engine;
 
         //Variable.for.CalculaterEngine
-        CalculatorEngine engine;
+        //CalculatorEngine engine;
         double Mpluse;
         double Mminus;
         double sum = 0;
