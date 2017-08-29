@@ -19,6 +19,11 @@ namespace CPE200Lab1
         private string firstOperand;
         private string operate;
 
+        //Variable.for.CalculaterEngine
+        CalculatorEngine engine;
+        double Mpluse;
+        double Mminus;
+        double sum = 0;
         private void resetAll()
         {
             firstOperand = null;
@@ -27,51 +32,15 @@ namespace CPE200Lab1
             hasDot = false;
             isAfterOperater = false;
             isAfterPressEqual = false;
+            sum = 0;
         }
 
-        private string calculate(string operate, string firstOperand, string secondOperand, int maxOutputSize = 8)
-        {
-            switch (operate)
-            {
-                case "+":
-                    return (Convert.ToDouble(firstOperand) + Convert.ToDouble(secondOperand)).ToString();
-                case "-":
-                    return (Convert.ToDouble(firstOperand) - Convert.ToDouble(secondOperand)).ToString();
-                case "X":
-                    return (Convert.ToDouble(firstOperand) * Convert.ToDouble(secondOperand)).ToString();
-                case "÷":
-                    // Not allow devide be zero
-                    if (secondOperand != "0")
-                    {
-                        double result;
-                        string[] parts;
-                        int remainLength;
-
-                        result = (Convert.ToDouble(firstOperand) / Convert.ToDouble(secondOperand));
-                        // split between integer part and fractional part
-                        parts = result.ToString().Split('.');
-                        // if integer part length is already break max output, return error
-                        if (parts[0].Length > maxOutputSize)
-                        {
-                            return "E";
-                        }
-                        // calculate remaining space for fractional part.
-                        remainLength = maxOutputSize - parts[0].Length - 1;
-                        // trim the fractional part gracefully. =
-                        return result.ToString("N" + remainLength);
-                    }
-                    break;
-                case "%":
-                    //your code here
-                    break;
-            }
-            return "E";
-        }
+        
 
         public MainForm()
         {
             InitializeComponent();
-
+            engine = new CalculatorEngine();
             resetAll();
         }
 
@@ -116,7 +85,7 @@ namespace CPE200Lab1
             if (firstOperand != null)
             {
                 string secondOperand = lblDisplay.Text;
-                string result = calculate(operate, firstOperand, secondOperand);
+                string result = engine.calculate(operate, firstOperand, secondOperand);
                 if (result is "E" || result.Length > 8)
                 {
                     lblDisplay.Text = "Error";
@@ -131,6 +100,8 @@ namespace CPE200Lab1
             }
             else
             {
+                
+                string temp = operate;
                 operate = ((Button)sender).Text;
                 switch (operate)
                 {
@@ -143,6 +114,36 @@ namespace CPE200Lab1
                         break;
                     case "%":
                         // your code here
+                        lblDisplay.Text = (Convert.ToDouble(firstOperand) * Convert.ToDouble(lblDisplay.Text) / 100).ToString();
+                        isAfterOperater = true;
+                        operate = temp;
+                        break;
+
+                    case "√":
+                        firstOperand = lblDisplay.Text;
+                        lblDisplay.Text = (Math.Pow(Convert.ToDouble(firstOperand), 0.5)).ToString();
+                        isAfterOperater = true;
+                        break;
+                    case "1/x":
+                        firstOperand = lblDisplay.Text;
+                        lblDisplay.Text = (1 / Convert.ToDouble(firstOperand)).ToString();
+                        isAfterOperater = true;
+                        break;
+                    case "M+":
+                        Mpluse = Convert.ToDouble(lblDisplay.Text);
+                        sum = sum + Mpluse;
+                        isAfterOperater = true;
+                        break;
+
+                    case "M-":
+                        Mminus = Convert.ToDouble(lblDisplay.Text);
+                        sum = sum - Mminus;
+                        isAfterOperater = true;
+                        break;
+                    case "MS":
+                        sum = Convert.ToDouble(lblDisplay.Text);
+
+                        isAfterOperater = true;
                         break;
                 }
             }
@@ -156,7 +157,7 @@ namespace CPE200Lab1
                 return;
             }
             string secondOperand = lblDisplay.Text;
-            string result = calculate(operate, firstOperand, secondOperand);
+            string result = engine.calculate(operate, firstOperand, secondOperand);
             if (result is "E" || result.Length > 8)
             {
                 lblDisplay.Text = "Error";
@@ -246,6 +247,16 @@ namespace CPE200Lab1
                 {
                     lblDisplay.Text = "0";
                 }
+        /*private void btnMR_Click(object sender, EventArgs e)
+                {
+                    lblDisplay.Text = sum.ToString();
+
+                }
+
+        private void btnMC_Click(object sender, EventArgs e)
+                {
+                    resetAll();
+                }*/
             }
         }
     }
