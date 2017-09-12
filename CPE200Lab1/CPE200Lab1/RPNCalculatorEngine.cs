@@ -37,7 +37,6 @@ namespace CPE200Lab1
             }
             //FIXME, what if there is more than one, or zero, items in the stack?
             if (rpnStack.Count != 1) return "E";
-
             result = rpnStack.Pop();
             return result;
         }
