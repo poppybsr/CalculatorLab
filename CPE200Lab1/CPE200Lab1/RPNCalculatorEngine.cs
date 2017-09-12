@@ -11,6 +11,7 @@ namespace CPE200Lab1
         public new string Process(string str)
         {
             Stack<string> rpnStack = new Stack<string>();
+            if (str is null) return "E";
             List<string> parts = str.Split(' ').ToList<string>();
             string result;
             string firstOperand, secondOperand;
@@ -35,6 +36,8 @@ namespace CPE200Lab1
                 }
             }
             //FIXME, what if there is more than one, or zero, items in the stack?
+            if (rpnStack.Count != 1) return "E";
+
             result = rpnStack.Pop();
             return result;
         }
